@@ -90,6 +90,12 @@ const Signup = () => {
                   error={errors?.password?.message}
                   {...register("password", {
                     required: "this field is required",
+                    pattern: {
+                      value:
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                      message:
+                        "Password must be at least 8 characters long, include uppercase, lowercase, a number, and a special character",
+                    },
                   })}
                 />
               </div>
