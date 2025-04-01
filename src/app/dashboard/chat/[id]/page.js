@@ -10,7 +10,7 @@ const Chat = () => {
   const router = useRouter();
   const { messages, sendMessage, messageListRef } = useChatSocket();
   const handleNavigate = () => {
-    router.back();
+    router.replace("/dashboard/chat");
   };
 
   if (!messages.length) {

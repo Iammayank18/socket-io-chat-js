@@ -1,15 +1,11 @@
 "use client";
 
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  createContext,
-  FC,
-} from "react";
+import React, { useContext, useEffect, useState, createContext } from "react";
 
 import useSocket from "../hooks/useSocket";
-import { getAccount } from "../appwrite/appwrite.config";
+import { useValidateUser } from "../hooks/useValidateUser";
+import { useRouter } from "next/navigation";
+import Loader from "../component/Loader";
 
 const GlobalContext = createContext({
   user: null,
@@ -23,27 +19,11 @@ const GlobalContext = createContext({
 export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [chatRooms, setChatRooms] = useState([]);
+  const { user, loading, setUser } = useValidateUser();
   const socket = useSocket();
-
-  useEffect(() => {
-    async function checkLogging() {
-      setIsLoading(true);
-      try {
-        const response = await getAccount();
-        if (response) {
-          setUser(response);
-          setIsLoggedIn(true);
-        }
-      } catch (e) {
-        setIsLoading(false);
-      }
-    }
-    checkLogging();
-  }, []);
+  const router = useRouter();
 
   useEffect(() => {
     if (!socket) return;
@@ -58,12 +38,30 @@ const GlobalContextProvider = ({ children }) => {
     };
   }, [socket, user]);
 
+  useEffect(() => {
+    if (!loading) {
+      if (user) {
+        router.push("/dashboard/chat");
+      } else {
+        router.push("/auth/login");
+      }
+    }
+  }, [loading, user, router]);
+
+  if (loading) {
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <Loader label={"Validating user..."} size={8} />
+      </div>
+    );
+  }
+
   return (
     <GlobalContext.Provider
       value={{
         user: user,
         setUser,
-        isLoading,
+        isLoading: loading,
         isLoggedIn,
         setIsLoggedIn,
         rooms: chatRooms,
