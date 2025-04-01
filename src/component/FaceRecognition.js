@@ -57,7 +57,6 @@ const FaceRecognition = ({ imageUrl, setResult }) => {
 
   const loadModels = useCallback(async () => {
     try {
-      console.log("Loading models...");
       setMessage("Loading models...");
       setLoading(true);
 
@@ -67,7 +66,6 @@ const FaceRecognition = ({ imageUrl, setResult }) => {
         faceapi.nets.ssdMobilenetv1.loadFromUri("/static/models"),
       ]);
 
-      console.log("Models loaded");
       setMessage("Models loaded. Analyzing face...");
       analyzeFace();
     } catch (error) {
@@ -107,7 +105,5 @@ export async function loadLabeledImages() {
         return new faceapi.LabeledFaceDescriptors(user.email, descriptions);
       })
     );
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }

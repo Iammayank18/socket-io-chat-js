@@ -10,8 +10,6 @@ const appwriteConfig = {
   roomCollectionId: process.env.NEXT_PUBLIC_APPWRITE_CHATROOMID,
 };
 
-console.log(appwriteConfig);
-
 const client = new Client()
   .setEndpoint(appwriteConfig.endpoint)
   .setProject(appwriteConfig.projectId)

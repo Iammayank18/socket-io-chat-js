@@ -11,7 +11,10 @@ import {
 } from "../../../appwrite/appwrite.config";
 import FaceRecognition from "../../../component/FaceRecognition";
 import CaptureImage from "../../../component/CaptureImage";
-import { decryptPassword } from "../../../functions/helper.function";
+import {
+  decryptPassword,
+  getErrorMessage,
+} from "../../../functions/helper.function";
 import { useGlobalContext } from "../../../context/GlobalContextProvider";
 import LabeledInput from "../../../component/LabeledInput";
 import Logo from "../../../component/Logo";
@@ -43,13 +46,12 @@ const Login = () => {
         router.push("/dashboard/chat");
       } catch (error) {
         setError("error", {
-          message: "something went wrong",
+          message: getErrorMessage(error),
         });
         setTimeout(() => {
           clearErrors("error");
-        }, 1200);
+        }, 3000);
         setLoading(false);
-        console.log(error);
       }
     },
     [clearErrors, router, setError, setIsLoggedIn, setUser]
@@ -59,7 +61,6 @@ const Login = () => {
     if (!result) return;
     try {
       const resultFromDb = await getUserByEmail(result.split(" ")[0]);
-      console.log(resultFromDb);
 
       if (resultFromDb) {
         await onSubmit({
@@ -75,8 +76,6 @@ const Login = () => {
   useEffect(() => {
     loginOnDetection();
   }, [loginOnDetection, result]);
-
-  console.log(tab);
 
   return (
     <section className="bg-gray-50 overflow-y-scroll">
@@ -160,12 +159,12 @@ const Login = () => {
                       required: "this field is required",
                     })}
                   />
+                  {errors.error?.message && (
+                    <span className="text-red-500 mb-2">
+                      {errors.error?.message}
+                    </span>
+                  )}
                 </div>
-                {errors.error?.message && (
-                  <span className="text-red-500 mb-2">
-                    {errors.error?.message}
-                  </span>
-                )}
 
                 <button
                   disabled={loading}

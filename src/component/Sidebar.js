@@ -31,7 +31,6 @@ const Sidebar = ({ children }) => {
       router.push("/auth/login");
     } catch (error) {
       setLoading(false);
-      console.log(error);
     }
   };
 

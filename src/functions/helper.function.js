@@ -19,10 +19,6 @@ export const decryptPassword = (password) => {
   return jwtDecode(password);
 };
 
-export function getErrorMessage(e) {
-  return e.message;
-}
-
 export const formatTime = (timestamp) => {
   return new Date(timestamp).toLocaleTimeString("en-US", {
     hour: "2-digit",
@@ -55,4 +51,16 @@ export const createImageFromBase64 = (base64) => {
     img.onload = () => resolve(img);
     img.onerror = (err) => reject(err);
   });
+};
+
+export const getErrorMessage = (error) => {
+  if (error.response) {
+    return error.resolve.message.replace("AppwriteException:", "");
+  }
+  if (error.message) {
+    return error.message.replace("AppwriteException:", "");
+  }
+  if (error.data) {
+    return error.data.message.replace("AppwriteException:", "");
+  }
 };

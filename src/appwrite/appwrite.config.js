@@ -16,8 +16,6 @@ const appwriteConfig = {
   roomCollectionId: process.env.NEXT_PUBLIC_APPWRITE_CHATROOMID,
 };
 
-console.log(appwriteConfig);
-
 const client = new Client()
   .setEndpoint(appwriteConfig.endpoint)
   .setProject(appwriteConfig.projectId);
@@ -30,8 +28,6 @@ export const createUser = async ({ email, password, file }) => {
   try {
     const uploadDocument = await uploadFile(email, file);
     const fileRes = await getFile(uploadDocument.$id);
-
-    console.log(fileRes);
 
     const newAccount = await account.create(
       ID.unique(),
@@ -69,7 +65,7 @@ export const createUser = async ({ email, password, file }) => {
 export const signin = async ({ email, password }) => {
   try {
     const session = await account.createEmailPasswordSession(email, password);
-    console.log("Session created:", session);
+
     return session;
   } catch (error) {
     throw new Error(error);
@@ -250,8 +246,6 @@ export const getMessages = async ({ room }) => {
       [Query.equal("room", room)]
     );
   } catch (error) {
-    console.log(error);
-
     throw new Error(error);
   }
 };

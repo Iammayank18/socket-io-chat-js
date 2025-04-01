@@ -26,6 +26,14 @@ const Signup = () => {
 
   const onSubmit = useCallback(
     async (values) => {
+      if (!capturedImage) {
+        setError("imageerror", {
+          message: "this field is required",
+        });
+        setTimeout(() => {
+          clearErrors("imageerror");
+        }, 1200);
+      }
       setLoading(true);
       try {
         const res = await createUser({ ...values, file: capturedImage });
@@ -46,7 +54,6 @@ const Signup = () => {
   );
 
   const pass = watch("password");
-  console.log(capturedImage);
 
   return (
     <section className="bg-gray-50">
@@ -107,6 +114,11 @@ const Signup = () => {
 
               <div>
                 <CaptureImage onCapture={(img) => setCapturedImage(img.file)} />
+                {errors?.imageerror?.message && (
+                  <span className="text-red-500 mt-3">
+                    {errors?.imageerror?.message}
+                  </span>
+                )}
               </div>
 
               <button
