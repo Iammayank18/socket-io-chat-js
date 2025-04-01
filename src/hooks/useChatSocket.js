@@ -21,7 +21,6 @@ const useChatSocket = () => {
     }
 
     socket.on("message", (msg) => {
-      console.log("Received message:", msg);
       setMessages((prev) => [...prev, msg]);
     });
 
@@ -32,7 +31,7 @@ const useChatSocket = () => {
         user: "system",
         timeStamp: new Date(),
       };
-      console.log("User joined:", systemMessage);
+
       setMessages((prev) => [...prev, systemMessage]);
     });
 
@@ -63,7 +62,6 @@ const useChatSocket = () => {
 
   const sendMessage = (msg) => {
     if (!socket || !msg || !params?.id) return;
-    console.log("am sending message", msg);
 
     const msgData = {
       room: params?.id,

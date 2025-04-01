@@ -38,8 +38,6 @@ const Sidebar = ({ children }) => {
     }
   };
 
-  console.log(openMenu);
-
   return (
     <div className="relative">
       <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200">

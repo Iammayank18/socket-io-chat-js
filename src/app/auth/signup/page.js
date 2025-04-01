@@ -9,6 +9,7 @@ import CaptureImage from "../../../component/CaptureImage";
 import LabeledInput from "../../../component/LabeledInput";
 import { useGlobalContext } from "../../../context/GlobalContextProvider";
 import Logo from "../../../component/Logo";
+import { getErrorMessage } from "../../../functions/helper.function";
 
 const Signup = () => {
   const router = useRouter();
@@ -40,10 +41,10 @@ const Signup = () => {
         setUser(res.data);
         setIsLoggedIn(true);
         router.push("/dashboard/chat");
-      } catch {
+      } catch (error) {
         setLoading(false);
         setError("error", {
-          message: "something went wrong",
+          message: getErrorMessage(error),
         });
         setTimeout(() => {
           clearErrors("error");

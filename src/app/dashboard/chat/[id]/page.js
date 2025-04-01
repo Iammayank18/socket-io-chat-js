@@ -4,6 +4,7 @@ import MessageList from "../../../../component/MessageList";
 import MessageInput from "../../../../component/MessageInput";
 import useChatSocket from "../../../../hooks/useChatSocket";
 import { useRouter } from "next/navigation";
+import Loader from "../../../../component/Loader";
 
 const Chat = () => {
   const router = useRouter();
@@ -11,6 +12,14 @@ const Chat = () => {
   const handleNavigate = () => {
     router.back();
   };
+
+  if (!messages.length) {
+    return (
+      <div className="flex justify-center items-center h-screen overflow-hidden">
+        <Loader size={8} label={"Loading chats....."} />
+      </div>
+    );
+  }
 
   return (
     <div className="mt-15">
