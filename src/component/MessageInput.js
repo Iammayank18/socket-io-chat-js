@@ -16,7 +16,10 @@ const MessageInput = ({ onSend }) => {
     setMsg(speech);
   }, [speech]);
   return (
-    <form className="flex items-center max-w-lg mx-auto" onSubmit={handleSend}>
+    <form
+      className="flex items-center mx-auto w-full md:max-w-lg fixed bottom-2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-5"
+      onSubmit={handleSend}
+    >
       <label htmlFor="message-box" className="sr-only">
         Message
       </label>
