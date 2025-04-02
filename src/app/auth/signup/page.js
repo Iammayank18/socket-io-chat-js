@@ -1,21 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { createUser } from "../../../appwrite/appwrite.config";
-import CaptureImage from "../../../component/CaptureImage";
 import LabeledInput from "../../../component/LabeledInput";
 import { useGlobalContext } from "../../../context/GlobalContextProvider";
 import Logo from "../../../component/Logo";
 import { getErrorMessage } from "../../../functions/helper.function";
+import CaptureAnalyseFace from "../../../component/CaptureAnalyseFace";
 
 const Signup = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { setIsLoggedIn, setUser } = useGlobalContext();
-  const [capturedImage, setCapturedImage] = useState(null);
+  const [capturedImage, setCapturedImage] = useState({
+    file: null,
+    base64: null,
+  });
+
   const {
     register,
     handleSubmit,
@@ -27,7 +31,7 @@ const Signup = () => {
 
   const onSubmit = useCallback(
     async (values) => {
-      if (!capturedImage) {
+      if (!capturedImage.file) {
         setError("imageerror", {
           message: "this field is required",
         });
@@ -37,7 +41,7 @@ const Signup = () => {
       }
       setLoading(true);
       try {
-        const res = await createUser({ ...values, file: capturedImage });
+        const res = await createUser({ ...values, file: capturedImage.file });
         setUser(res.data);
         setIsLoggedIn(true);
         router.push("/dashboard/chat");
@@ -53,6 +57,8 @@ const Signup = () => {
     },
     [capturedImage, clearErrors, router, setError, setIsLoggedIn, setUser]
   );
+
+  console.log(capturedImage);
 
   const pass = watch("password");
 
@@ -120,7 +126,13 @@ const Signup = () => {
               </div>
 
               <div>
-                <CaptureImage onCapture={(img) => setCapturedImage(img.file)} />
+                <CaptureAnalyseFace
+                  onCapture={(img) => {
+                    console.log(img);
+
+                    setCapturedImage({ file: img.file, base64: img.base64 });
+                  }}
+                />
                 {errors?.imageerror?.message && (
                   <span className="text-red-500 mt-3">
                     {errors?.imageerror?.message}

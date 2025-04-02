@@ -9,8 +9,6 @@ import {
   getUserByEmail,
   signin,
 } from "../../../appwrite/appwrite.config";
-import FaceRecognition from "../../../component/FaceRecognition";
-import CaptureImage from "../../../component/CaptureImage";
 import {
   decryptPassword,
   getErrorMessage,
@@ -18,12 +16,12 @@ import {
 import { useGlobalContext } from "../../../context/GlobalContextProvider";
 import LabeledInput from "../../../component/LabeledInput";
 import Logo from "../../../component/Logo";
+import CaptureValidateFace from "../../../component/CaptureValidateFace";
 
 const Login = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { setIsLoggedIn, setUser } = useGlobalContext();
-  const [capturedImage, setCapturedImage] = useState("");
   const [result, setResult] = useState("");
   const [tab, setTab] = useState("crendentials");
   const {
@@ -113,20 +111,10 @@ const Login = () => {
         {tab === "facial" ? (
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl text-center">
                 Login with your face 😀
               </h1>
-              <CaptureImage
-                onCapture={(e) => {
-                  setCapturedImage(e?.base64);
-                }}
-              />
-              {capturedImage && (
-                <FaceRecognition
-                  imageUrl={capturedImage}
-                  setResult={setResult}
-                />
-              )}
+              <CaptureValidateFace setResult={setResult} />
             </div>
           </div>
         ) : (
