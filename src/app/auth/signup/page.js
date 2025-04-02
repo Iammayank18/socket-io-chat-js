@@ -58,8 +58,6 @@ const Signup = () => {
     [capturedImage, clearErrors, router, setError, setIsLoggedIn, setUser]
   );
 
-  console.log(capturedImage);
-
   const pass = watch("password");
 
   return (
@@ -128,8 +126,6 @@ const Signup = () => {
               <div>
                 <CaptureAnalyseFace
                   onCapture={(img) => {
-                    console.log(img);
-
                     setCapturedImage({ file: img.file, base64: img.base64 });
                   }}
                 />
